@@ -1,0 +1,97 @@
+{% if currentUser.can('permEmailFwd') or currentUser.can('permEmailDmnFwd') or currentUser.admin %}
+
+{% set settings = craft.cpanelemail.getSettings() %}
+
+{% set extraPageHeaderHtml %}
+<div class="buttons first">
+
+    {% if currentUser.can('permEmailFwd') or currentUser.admin %}
+    <a class="btn submit add icon right fullwidth" href="/{{ craft.config.cpTrigger|default('admin') }}/cpanelemail/mailfwd/add"> {{ "Add email forwarder"|t }}</a>
+    {% endif %}
+    {% if currentUser.can('permEmailDmnFwd') or currentUser.admin %}
+    <a class="btn submit add icon right fullwidth" href="/{{ craft.config.cpTrigger|default('admin') }}/cpanelemail/mailfwd/adddmn"> {{ "Add domain forwarder"|t }}</a>
+    {% endif %}
+</div>
+{% endset %}
+
+{% set content %}
+
+
+{% if currentUser.can('permEmailFwd') or currentUser.admin %}
+
+    {% set list = craft.cpanelemail.getEmailFwd %}
+    {% if list %}
+
+
+                    <table class="data fullwidth">
+                        <thead>
+                            <tr>
+                                <th>{{ "Email address"|t }}</th>
+                                <th>{{ "forward to"|t }}</th>
+                                <th style="text-align:right">{{ "Actions"|t }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for email in list %}
+                        <tr>
+                            <td>{{ email.dest }}</td>
+                            <td>{{ email.forward }}</td>
+                            <td style="text-align:right">
+                                <a data-icon="trash" alt="{{ "Delete"|t }}" title="{{ "Delete"|t }}" class="btn" href="/{{ craft.config.cpTrigger|default('admin') }}/cpanelemail/mailfwd/delete/{{ email.dest }}"></a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+    {% else %}
+    <p class="disabled"><em>{{ "There is no email forwarders yet"|t }}</em></p>
+    {% endif %}
+
+
+    {% if currentUser.can('permEmailDmnFwd') or currentUser.admin %}<hr />{% endif %}
+    {% endif %}
+
+    {% if currentUser.can('permEmailDmnFwd') or currentUser.admin %}
+    <h2>{{ "Domain forwarders"|t }}</h2>
+
+    {% set list = craft.cpanelemail.getEmailDmnFwd %}
+    {% if list %}
+                    <table class="data fullwidth">
+                        <thead>
+                            <tr>
+                                <th>{{ "Domain"|t }}</th>
+                                <th>{{ "forward to"|t }}</th>
+                                <th style="text-align:right">{{ "Actions"|t }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for email in list %}
+                        <tr>
+                            <td>{{ email.dest }}</td>
+                            <td>{{ email.forward }}</td>
+                            <td style="text-align:right">
+                                <a data-icon="trash" alt="{{ "Delete"|t }}" title="{{ "Delete"|t }}" class="btn" href="/{{ craft.config.cpTrigger|default('admin') }}/cpanelemail/mailfwd/deletedmn/{{ email.dest }}"></a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+    {% else %}
+    <p class="disabled"><em>{{ "There is no domain forwarders yet"|t }}</em></p>
+    {% endif %}
+
+    {% endif %}
+
+
+{% endset %}
+
+{% extends "cpanelemail/_layouttabs" %}
+
+{% set title = "Email forwarders"|t %}
+
+{% set selectedTab = 'mailfwd' %}
+
+
+{% else %}
+{% redirect "/"~ craft.config.cpTrigger|default('admin') ~"/email" %}
+{% endif %}

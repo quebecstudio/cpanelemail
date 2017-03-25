@@ -1,0 +1,67 @@
+{#
+/**
+ * Email plugin for Craft CMS
+ *
+ * Email Settings.twig
+ *
+ * @author    Kiwi Création
+ * @copyright Copyright (c) 2016 Kiwi Création
+ * @link      http://www.kiwicreation.ca
+ * @package   Email
+ * @since     1.1
+ */
+#}
+
+{% import "_includes/forms" as forms %}
+
+{{
+    forms.textField({
+        label: "cPanel Host"|t,
+        id: 'cpanel_ip',
+        name: 'cpanel_ip',
+        instructions: "Enter the cPanel host host name or IP address"|t,
+        value: settings.cpanel_ip,
+        errors: settings.getErrors('cpanel_ip')
+    })
+}}
+{{
+    forms.textField({
+        label: "cPanel Port"|t,
+        id: 'cpanel_port',
+        name: 'cpanel_port',
+        instructions: "Enter the cPanel port number. Normally 2082 or 2083."|t,
+        value: settings.cpanel_port,
+        errors: settings.getErrors('cpanel_port')
+    })
+}}
+{{
+    forms.textField({
+        label: "cPanel Account"|t,
+        id: 'cpanel_account',
+        name: 'cpanel_account',
+        instructions: "Enter your cPanel account name"|t,
+        value: settings.cpanel_account,
+        errors: settings.getErrors('cpanel_account')
+    })
+}}
+{{
+    forms.textField({
+        label: "Username"|t,
+        id: 'cpanel_username',
+        name: 'cpanel_username',
+        instructions: "Enter your cPanel account username"|t,
+        value: settings.cpanel_username,
+        errors: settings.getErrors('cpanel_username')
+    })
+}}
+{{
+    forms.textField({
+        label: "Password"|t,
+        id: 'cpanel_password',
+        name: 'cpanel_password',
+        instructions: "Enter your cPanel account password"|t,
+        value: settings.cpanel_password,
+        errors: settings.getErrors('cpanel_password'),
+        type: "password"
+    })
+}}

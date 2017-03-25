@@ -1,0 +1,19 @@
+{% extends '_layouts/cp' %}
+{% set settings = craft.cpanelemail.getSettings() %}
+
+{% set subnav = {} %}
+{% set subnav = subnav|merge({overview: {label: "System Overview"|t, url: url('email') }}) %}
+
+{% if currentUser.can('permEmailAcc') or currentUser.admin %}
+{% set subnav = subnav|merge({mailacc: {label: "Email Accounts"|t, url: url('cpanelemail/mailacc') }}) %}
+{% endif %}
+
+{% if currentUser.can('permEmailFwd') or currentUser.can('permEmailDmnFwd') or currentUser.admin %}
+{% set subnav = subnav|merge({mailfwd: {label: "Forwarders"|t, url: url('cpanelemail/mailfwd') }}) %}
+{% endif %}
+
+{% if currentUser.can('permEmailMsg') or currentUser.admin %}
+{% set subnav = subnav|merge({mailmsg: {label: "Auto Responders"|t, url: url('cpanelemail/mailmsg') }}) %}
+{% endif %}
+
+{% set selectedSubnavItem = craft.request.segment(2) %}

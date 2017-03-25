@@ -1,0 +1,61 @@
+{% if currentUser.can('permEmailDmnFwd') or currentUser.admin %}
+
+{% set fullPageForm = true %}
+{% block saveButton %}
+  <input type="submit" class="btn submit" value="{{ 'Create forwarder'|t }}">
+{% endblock %}
+
+{% block content %}
+
+    <p>{{ "In addition to forwarding individual mail accounts, you can forward all email from one domain to another."|t }}<br />
+    {{ "To send all email for a domain to a single email address, change the Default Address for that domain."|t }}</p>
+
+
+        <input type="hidden" name="action" value="cpanelEmail/mailfwd/adddmn">
+        <input type="hidden" name="redirect" value="cpanelemail/mailfwd">
+
+    {% import "_includes/forms" as forms %}
+
+    <table style="width:450px;">
+        <tr>
+            <td valign="top">
+                <div class="field" id="domain-field">
+                    <div class="heading">
+                        <label for="domain">{{ "Domain"|t }}</label>
+                    </div>
+                    <div class="select">
+                        <select name="domain" id="domain" style="width:200px">
+                            {% set domains = craft.cpanelemail.getEmailDomains %}
+                            {% for domain in domains %}
+                            <option value="{{ domain.domain }}">{{ domain.domain }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </td>
+            <td style="width:210px;" valign="top">
+                <div class="field" id="email-field">
+                    <div class="heading">
+                        <label for="email">{{ "To"|t }}</label>
+                    </div>
+                    <div class="input">
+                        <input class="text" type="text" id="destdomain" name="destdomain" value="" autocomplete="off"  style="width:200px">
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+
+
+{% endblock %}
+
+{% extends "cpanelemail/_layout" %}
+
+{% set title = "Add Domain Forwarder"|t %}
+
+{% set selectedTab = 'mailfwd' %}
+
+{% else %}
+{% redirect "/"~ craft.config.cpTrigger|default('admin') ~"/email" %}
+{% endif %}

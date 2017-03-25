@@ -1,0 +1,71 @@
+{% if currentUser.can('permEmailAcc') or currentUser.admin %}
+{% set settings = craft.cpanelemail.getSettings() %}
+
+
+{% set extraPageHeaderHtml %}
+
+<div class="buttons first">
+    <a class="btn submit add icon right fullwidth" href="/{{ craft.config.cpTrigger|default('admin') }}/cpanelemail/mailacc/add"> {{ "Add email account"|t }}</a>
+</div>
+
+{% endset %}
+
+
+{% block content %}
+
+
+
+
+    {% set list = craft.cpanelemail.getEmailAcc %}
+
+    {% if list %}
+
+
+                    <table class="data fullwidth">
+                        <thead>
+                            <tr>
+                                <th>{{ "Account"|t }}</th>
+                                <th>{{ "Quota"|t }}</th>
+                                <th style="text-align:right">{{ "Actions"|t }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for email in list %}
+                        <tr>
+                            <td>{{ email.user ~"@"~email.domain }}</td>
+                            <td>
+                                {{ (email._diskquota>0)?email.humandiskused:"0 "~"KB"|t }} /
+                                {% if email.diskquota=='unlimited' %}
+                                    {{ "Unlimited"|t }}
+                                {% else %}
+                                    {{ email.humandiskquota }}
+                                {% endif %}
+                            </td>
+                            <td style="text-align:right">
+                                <a data-icon="edit" alt="{{ "Quota"|t }}" title="{{ "Quota"|t }}" class="btn"  href="/{{ craft.config.cpTrigger|default('admin') }}/cpanelemail/mailacc/quota/{{ email.user ~"@"~email.domain }}"></a>
+                                <a data-icon="secure" alt="{{ "Password"|t }}" title="{{ "Password"|t }}" class="btn" href="/{{ craft.config.cpTrigger|default('admin') }}/cpanelemail/mailacc/password/{{ email.user ~"@"~email.domain }}"></a>
+                                <a data-icon="trash" alt="{{ "Delete"|t }}" title="{{ "Delete"|t }}" class="btn" href="/{{ craft.config.cpTrigger|default('admin') }}/cpanelemail/mailacc/delete/{{ email.user ~"@"~email.domain }}"></a>                                
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+    {% else %}
+    <p class="disabled"><em>{{ "There is no email account yet" }}</em></p>
+    {% endif %}
+
+
+
+{% endblock %}
+
+{% extends "cpanelemail/_layouttabs" %}
+
+{% set title = "Email Accounts"|t %}
+
+{% set selectedTab = 'mailacc' %}
+
+
+
+{% else %}
+{% redirect "/"~ craft.config.cpTrigger|default('admin') ~"/email" %}
+{% endif %}

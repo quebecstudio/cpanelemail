@@ -1,0 +1,49 @@
+{% if currentUser.can('permEmailAcc') or currentUser.admin %}
+{% set fullPageForm = true %}
+{% block saveButton %}
+  <input type="submit" class="btn submit" value="{{ 'Save'|t }}">
+{% endblock %}
+
+{% block content %}
+
+    <div class="clear"></div>
+
+
+    {% set list = craft.cpanelemail.getEmailAcc %}
+    {% set sel = "" %}
+    {% for _email in list %}
+        {% if (_email.user~"@"~_email.domain) == email %}
+            {% set sel = _email %}
+        {% endif %}
+
+    {% endfor %}
+
+
+
+        <input type="hidden" name="action" value="cpanelEmail/mailacc/quota">
+        <input type="hidden" name="redirect" value="cpanelemail/mailacc">
+        <input type="hidden" name="email" value="{{ email }}">
+
+    {% import "_includes/forms" as forms %}
+
+    {% set defaultQuota = craft.cpanelemail.defaultQuota %}
+
+    <input type="radio" name="quota" id="quota-fixed" value="fixed" {% if sel.diskquota!="unlimited" %}checked{% endif %} /> <input class="text" type="text" id="quotavalue" name="quotavalue" {% if sel.diskquota!="unlimited" %}value="{{ sel.diskquota }}"{% else %}value="{{ defaultQuota }}"{% endif %} style="width:50px"> {{ "MB"|t }}<br /><br />
+    <input type="radio" name="quota" id="quota-unlimited" value="unlimited" {% if sel.diskquota=="unlimited" %}checked{% endif %} /> {{ "Unlimited"|t }}
+
+
+
+
+
+
+{% endblock %}
+
+{% extends "cpanelemail/_layout" %}
+
+{% set title = "Set Email Quota"|t~" : "~email %}
+
+{% set selectedTab = 'mailacc' %}
+
+{% else %}
+{% redirect "/"~ craft.config.cpTrigger|default('admin') ~"/email" %}
+{% endif %}

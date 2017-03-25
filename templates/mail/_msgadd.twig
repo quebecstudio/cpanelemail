@@ -1,0 +1,146 @@
+{% if currentUser.can('permEmailMsg') or currentUser.admin %}
+
+{% set fullPageForm = true %}
+{% block saveButton %}
+  <input type="submit" class="btn submit" value="{{ 'Create auto responder'|t }}">
+{% endblock %}
+
+{% block content %}
+{% includeCssResource "lib/redactor/redactor.css" %}
+{% includeJsResource "lib/redactor/redactor.js" %}
+{% import "_includes/forms" as forms %}
+
+
+
+	<input type="hidden" name="action" value="cpanelEmail/mailmsg/add">
+	<input type="hidden" name="redirect" value="cpanelemail/mailmsg">
+	<input type="hidden" name="charset" value="utf-8">
+	<input type="hidden" name="html" value="1">
+
+    <table style="width:450px;">
+        <tr>
+            <td style="width:210px;" valign="top">
+                <div class="field" id="email-field">
+                    <div class="heading">
+                        <label for="email">{{ "Email"|t }}</label>
+                    </div>
+                    <div class="input">
+                        <input class="text" type="text" id="email" name="email" value="" autocomplete="off"  style="width:200px">
+                    </div>
+                </div>
+				</td>
+            <td valign="top">
+                <div class="field" id="domain-field">
+                    <div class="heading">
+                        <label for="domain">{{ "Domain"|t }}</label>
+                    </div>
+                    <div class="select">
+                        <select name="domain" id="domain" style="width:200px">
+                            {% set domains = craft.cpanelemail.getEmailDomains %}
+                            {% for domain in domains %}
+                            <option value="{{ domain.domain }}">@{{ domain.domain }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+    <div class="field" id="from-field">
+        <div class="heading">
+            <label for="from">{{ "From"|t }}</label>
+        </div>
+        <div class="input">
+            <input class="text" type="text" id="from" name="from" value="" autocomplete="off"  style="width:400px">
+        </div>
+    </div>
+
+    <div class="field" id="subject-field">
+        <div class="heading">
+            <label for="subject">{{ "Subject"|t }}</label>
+        </div>
+        <div class="input">
+            <input class="text" type="text" id="subject" name="subject" value="" autocomplete="off"  style="width:400px">
+        </div>
+    </div>
+
+    <div class="field" id="body-field">
+        <div class="heading">
+            <label for="body">{{ "Body"|t }}</label>
+        </div>
+        <div class="input">
+            <textarea class="text message rtext" id="body" name="body" value="" autocomplete="off"  style="width:400px;height:200px"></textarea>
+        </div>
+    </div>
+
+	<div class="field" id="domain-field">
+		<div class="heading">
+			<label for="interval">{{ "Interval"|t }}</label>
+				<div class="instructions"><p>{{ "The number of hours to wait between responses to the same email address."|t }}</p>
+			</div>
+		</div>
+		<div class="select">
+			<select name="interval" id="domain" style="width:200px">
+
+				{% for i in [1,2,3,4,5,6,8,12,18,24,36,48,72] %}
+				<option value="{{ i }}">{{ i }} {{ (i==1)?"hour"|t:"hours"|t }}</option>
+				{% endfor %}
+			</select>
+		</div>
+	</div>
+
+    <table style="width:450px;">
+        <tr>
+            <td style="width:180px;" valign="top">
+                <h2>{{ "Start"|t }}</h2>
+                <input type="radio" name="msgstart" id="start-immediately" value="0" checked />  <label for="start-immediately">{{ "Immediately"|t }}</label>
+                <br />
+                <input type="radio" name="msgstart" id="start-when" value="1" />  <label for="start-when">{{ "Selected date and time"|t }}:</label>
+            </td>
+            <td style="width:210px;" valign="top">
+                {{ forms.dateTimeField({
+                    label: "Start Date"|t,
+                    id: 'date_start',
+                    name: 'date_start'
+                    }) }}
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">&nbsp;</td>
+        </tr>
+        <tr>
+            <td style="width:180px;" valign="top">
+                <h2>{{ "End"|t }}</h2>
+                <input type="radio" name="msgend" id="end-never" value="0" checked />  <label for="end-never">{{ "Never"|t }}</label>
+                <br />
+                <input type="radio" name="msgend" id="end-when" value="1" />  <label for="end-when">{{ "Selected date and time"|t }}:</label>
+            </td>
+            <td style="width:210px;" valign="top">
+                {{ forms.dateTimeField({
+                    label: "End Date"|t,
+                    id: 'date_end',
+                    name: 'date_end'
+                    }) }}
+            </td>
+        </tr>
+    </table>
+
+{% endblock %}
+
+{% set myJs %}
+ $('.rtext').redactor({
+       "buttons": ["format","bold","italic","lists","link","file","horizontalrule"],
+    });
+{% endset %}
+{% includeJs myJs %}
+
+{% extends "cpanelemail/_layout" %}
+
+{% set title = "Add Auto Responder"|t %}
+
+{% set selectedTab = 'mailmsg' %}
+
+{% else %}
+{% redirect "/"~ craft.config.cpTrigger|default('admin') ~"/email" %}
+{% endif %}

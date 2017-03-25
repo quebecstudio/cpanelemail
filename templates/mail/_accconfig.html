@@ -1,0 +1,104 @@
+{% set settings = craft.cpanelemail.getSettings() %}
+
+{% set extraPageHeaderHtml %}
+{% if (settings.cpanel_webmail_url) %}
+<a class="btn sharebtn icon right" href="{{ settings.cpanel_webmail_url }}" target="_blank"> {{ "Access Webmail"|t }}</a>
+{% endif %}
+{% endset %}
+
+{% block content %}
+
+    <p class="left">{{ "You can manually configure your mail client using the settings below"|t }}:</p>
+    <div class="clear"></div>
+    <hr />
+
+    <h2>{{ "Non-SSL Settings"|t }}</h2>
+
+    <table class="data fullwidth">
+        <tr>
+            <td>{{ "Username"|t }}:</td>
+            <td>{{ email }}</td>
+        </tr>
+    	<tr>
+            <td>{{ "Password"|t }}:</td>
+            <td><em>{{ "Use the email account’s password."|t }}</em></td>
+        </tr>
+        <tr>
+            <td>{{ "Incoming Server"|t }}:</td>
+            <td>{{ settings.cpanel_config_nonssl_incsrv }}</td>
+        </tr>
+        <tr>
+            <td>{{ "IMAP Port"|t }}:</td>
+            <td>{{ settings.cpanel_config_nonssl_imap }}</td>
+        </tr>
+        <tr>
+            <td>{{ "POP3 Port"|t }}:</td>
+            <td>{{ settings.cpanel_config_nonssl_pop3 }}</td>
+        </tr>
+        <tr>
+            <td>{{ "Outgoing Server"|t }}:</td>
+            <td>{{ settings.cpanel_config_nonssl_outsrv }}</td>
+        </tr>
+        <tr>
+            <td>{{ "SMTP Port"|t }}:</td>
+            <td>{{ settings.cpanel_config_nonssl_smtp }}</td>
+        </tr>
+    </table>
+    <p style="color:red;background-color:yellow;font-weight:bold">{{ "Authentication is required for IMAP, POP3, and SMTP."|t }}</p>
+
+    <hr />
+
+    <h2>{{ "Secure SSL/TLS Settings"|t }}</h2>
+    <table class="data fullwidth">
+        <tr>
+            <td>{{ "Username"|t }}:</td>
+            <td>{{ email }}</td>
+        </tr>
+    	<tr>
+            <td>{{ "Password"|t }}:</td>
+            <td><em>{{ "Use the email account’s password."|t }}</em></td>
+        </tr>
+        <tr>
+            <td>{{ "Incoming Server"|t }}:</td>
+            <td>{{ settings.cpanel_config_ssl_incsrv }}</td>
+        </tr>
+        <tr>
+            <td>{{ "IMAP Port"|t }}:</td>
+            <td>{{ settings.cpanel_config_ssl_imap }}</td>
+        </tr>
+        <tr>
+            <td>{{ "POP3 Port"|t }}:</td>
+            <td>{{ settings.cpanel_config_ssl_pop3 }}</td>
+        </tr>
+        <tr>
+            <td>{{ "Outgoing Server"|t }}:</td>
+            <td>{{ settings.cpanel_config_ssl_outsrv }}</td>
+        </tr>
+        <tr>
+            <td>{{ "SMTP Port"|t }}:</td>
+            <td>{{ settings.cpanel_config_ssl_smtp }}</td>
+        </tr>
+    </table>
+    <p style="color:red;background-color:yellow;font-weight:bold">{{ "Authentication is required for IMAP, POP3, and SMTP."|t }}</p>
+
+    {% if (settings.cpanel_webmail_url) %}
+    <hr />
+    <h2>{{ "Webmail Application"|t }}</h2>
+
+    <div class="field" id="domain-field">
+        <div class="heading">
+            <label for="webmail">{{ "Copy or bookmark this URL"|t }}</label>
+        </div>
+        <div class="input">
+            <input class="text fullwidth" type="text" id="webmail" name="webmail" readonly="true" value="{{ settings.cpanel_webmail_url }}" autocomplete="off" >
+        </div>
+    </div>
+    {% endif %}
+
+{% endblock %}
+
+{% extends "cpanelemail/_layout" %}
+
+{% set title = "Configure Email Client"|t~" : "~email %}
+
+{% set selectedTab = 'mailacc' %}

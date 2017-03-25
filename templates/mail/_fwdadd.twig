@@ -1,0 +1,78 @@
+{% if currentUser.can('permEmailFwd') or currentUser.admin %}
+
+{% set fullPageForm = true %}
+{% block saveButton %}
+  <input type="submit" class="btn submit" value="{{ 'Create forwarder'|t }}">
+{% endblock %}
+
+{% block content %}
+
+
+        <input type="hidden" name="action" value="cpanelEmail/mailfwd/add">
+        <input type="hidden" name="redirect" value="cpanelemail/mailfwd">
+
+    {% import "_includes/forms" as forms %}
+
+    <table style="width:450px;">
+        <tr>
+            <td style="width:210px;" valign="top">
+                <div class="field" id="email-field">
+                    <div class="heading">
+                        <label for="email">{{ "Address to Forward"|t }}</label>
+                    </div>
+                    <div class="input">
+                        <input class="text" type="text" id="email" name="email" value="" autocomplete="off"  style="width:200px">
+                    </div>
+                </div>
+            </td>
+            <td valign="top">
+                <div class="field" id="domain-field">
+                    <div class="heading">
+                        <label for="domain">{{ "Domain"|t }}</label>
+                    </div>
+                    <div class="select">
+                        <select name="domain" id="domain" style="width:200px">
+                            {% set domains = craft.cpanelemail.getEmailDomains %}
+                            {% for domain in domains %}
+                            <option value="{{ domain.domain }}">@{{ domain.domain }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </table>
+    <br />
+    <h2>Destination</h2>
+
+
+    <div class="field">
+    <input type="radio" name="fwdopt" id="fwdopt-fwd" value="fwd" checked /> {{ "Forward to Email Address"|t }}<br />
+    <input class="text" type="text" id="fwdemail" name="fwdemail" value="" style="width:400px">
+    <div class="instructions"><p><strong>{{ "Note"|t }} : </strong> {{ "If you need to forward to more than one address with the same alias, create one by address."|t }}</p></div>
+    </div>
+
+    <div class="field">
+        <input type="radio" name="fwdopt" id="fwdopt-fail" value="fwdopt-fail" /> {{ "Discard and send an error to the sender (at SMTP time)."|t }}<br />
+    <input class="text" type="text" id="failmsgs" name="failmsgs" value="{{ "No such person at this address."|t }}" style="width:400px">
+    <div class="instructions"><p><strong>{{ "Note"|t }} : </strong> {{ "Failure Message (seen by sender)"|t }}</p></div>
+    </div>
+    <br />
+    <br />
+    <br />
+
+
+
+
+
+{% endblock %}
+
+{% extends "cpanelemail/_layout" %}
+
+{% set title = "Add Email Forwarder"|t %}
+
+{% set selectedTab = 'mailfwd' %}
+
+{% else %}
+{% redirect "/"~ craft.config.cpTrigger|default('admin') ~"/email" %}
+{% endif %}

@@ -1,0 +1,55 @@
+{% if currentUser.can('permEmailMsg') or currentUser.admin %}
+
+{% set extraPageHeaderHtml %}
+<div class="buttons first">
+    <a class="btn submit add icon right fullwidth" href="/{{ craft.config.cpTrigger|default('admin') }}/cpanelemail/mailmsg/add"> {{ "Add auto responder"|t }}</a>
+</div>
+{% endset %}
+
+{% set content %}
+    {% set list = craft.cpanelemail.getEmailAutoResponders %}
+    {% if list %}
+                    <table class="data fullwidth">
+                        <thead>
+                            <tr>
+                                <th>{{ "Email address"|t }}</th>
+                                <th>{{ "Subject"|t }}</th>
+                                <th>{{ "Start Date"|t }}</th>
+                                <th>{{ "End Date"|t }}</th>
+                                <th style="text-align:right">{{ "Actions"|t }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for email in list %}
+                        {% set ar = craft.cpanelemail.fetchAutoResponder(email.email) %}
+                        <tr>
+                            <td>{{ email.email }}</td>
+                            <td>{{ email.subject }}</td>
+                            <td>{{ ar.start==0?"Now"|t:ar.start|date('Y-m-d H:i') }}</td>
+                            <td>{{ ar.stop==0?"Never"|t:ar.stop|date('Y-m-d H:i') }}</td>
+                            <td style="text-align:right">
+                                <a data-icon="edit" title="{{ "Edit"|t }}" alt="{{ "Edit"|t }}" class="btn" href="/{{ craft.config.cpTrigger|default('admin') }}/cpanelemail/mailmsg/edit/{{ email.email }}"></a>
+                                <a data-icon="trash" title="{{ "Delete"|t }}" alt="{{ "Delete"|t }}" class="btn" href="/{{ craft.config.cpTrigger|default('admin') }}/cpanelemail/mailmsg/delete/{{ email.email }}"></a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+    {% else %}
+        <p class="disabled"><em>{{ "There is no auto responder yet" }}</em></p>
+    {% endif %}
+
+
+
+
+{% endset %}
+
+{% extends "cpanelemail/_layouttabs" %}
+
+{% set title = "Auto responders"|t %}
+
+{% set selectedTab = 'mailmsg' %}
+
+{% else %}
+{% redirect "/"~ craft.config.cpTrigger|default('admin') ~"/email" %}
+{% endif %}

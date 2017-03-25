@@ -1,0 +1,31 @@
+{% if currentUser.can('permEmailDmnFwd') or currentUser.admin %}
+{% block content %}
+
+
+    <form action="" method="post" accept-charset="UTF-8">
+        <input type="hidden" name="action" value="cpanelEmail/mailfwd/deletedmn">
+        <input type="hidden" name="redirect" value="cpanelemail/mailfwd">
+        <input type="hidden" name="domain" value="{{ domain }}">
+
+        <h2>{{ "Are you sure?"|t }}</h2>
+        <p style="color:red">{{ "This cannot be undone!"|t }}</p>
+        <br />
+
+        <a href="/{{ craft.config.cpTrigger|default('admin') }}/cpanelemail/mailfwd" class="btn">{{ "No, do not delete!"|t }}</a> <button class="btn submit" type="submit">{{ "Yes, delete!"|t }}</button>
+
+    </form>
+
+
+
+
+{% endblock %}
+
+{% extends "cpanelemail/_layout" %}
+
+{% set title = "Delete Domain Forwarder"|t~" : "~domain %}
+
+{% set selectedTab = 'mailfwd' %}
+
+{% else %}
+{% redirect "/"~ craft.config.cpTrigger|default('admin') ~"/email" %}
+{% endif %}

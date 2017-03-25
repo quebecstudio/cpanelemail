@@ -1,0 +1,110 @@
+{% set settings = craft.cpanelEmail.getSettings() %}
+{% set stats = craft.cpanelEmail.getStats %}
+
+
+{% set content %}
+
+{% if not stats %}
+ {% redirect "/"~ craft.config.cpTrigger|default('admin') ~"/settings/plugins/email" %}
+{% endif %}
+
+
+<h2>{{ "Email Usage"|t }}</h2>
+
+
+    {% if currentUser.can('permEmailAcc') or currentUser.can('permEmailFwd') or currentUser.can('permEmailDmnFwd') or currentUser.can('permEmailMsg') or currentUser.admin %}
+
+    <table class="data" style="width:700px">
+        <tbody>
+
+        {% if currentUser.can('permEmailAcc') or currentUser.admin %}
+        <tr>
+            <td style="width:320px;">{{ (stats.emailaccounts.count>1)?"Email accounts"|t:"Email account"|t}}</td>
+            <td>{{ stats.emailaccounts.count }} / {% if (stats.emailaccounts._max!='unlimited') %}{{ stats.emailaccounts._max }}{% else %}&#8734;{% endif %}</td>
+        </tr>
+        {% endif %}
+
+        {% if currentUser.can('permEmailFwd') or currentUser.admin %}
+        <tr>
+            <td style="width:320px;">{{ (stats.emailforwarders.count>1)?"Email forwarders"|t:"Email forwarder"|t}}</td>
+            <td>{{ stats.emailforwarders.count }} / {% if (stats.emailforwarders._max!='unlimited') %}{{ stats.emailforwarders._max }}{% else %}&#8734;{% endif %}</td>
+        </tr>
+        {% endif %}
+
+        {% if currentUser.can('permEmailDmnFwd') or currentUser.admin %}
+        {% set list = craft.cpanelemail.getEmailDmnFwd %}
+        <tr>
+            <td style="width:320px;">{{ (list|length>1)?"Domain forwarders"|t:"Domain forwarder"|t}}</td>
+            <td>{{ list|length }}</td>
+        </tr>
+        {% endif %}
+
+        {% if currentUser.can('permEmailMsg') or currentUser.admin %}
+        <tr>
+            <td style="width:320px;">{{ (stats.autoresponders.count>1)?"Auto responders"|t:"Auto responder"|t}}</td>
+            <td>{{ stats.autoresponders.count }} / {% if (stats.autoresponders._max!='unlimited') %}{{ stats.autoresponders._max }}{% else %}&#8734;{% endif %}</td>
+        </tr>
+        {% endif %}
+
+
+        </tbody>
+    </table>
+    {% else %}
+    <p>{{ "It seems all permissions are off."|t }} <a href="/{{ craft.config.cpTrigger|default('admin') }}/settings/plugins/cpanelemail">{{ "Please review your settings"|t }}</a></p>
+    {% endif %}
+
+    {% if currentUser.can('permCpanelStats') or currentUser.admin %}
+    <br />
+    <h2>{{ "Usage Statistics"|t }}</h2>
+    <table class="data" style="width:700px">
+        <tbody>
+        <tr>
+            <td style="width:320px;">{{ stats.diskusage.item }}</td>
+            <td>{{ stats.diskusage.count }}</td>
+        </tr>
+        <tr>
+            <td style="width:320px;">{{ stats.bandwidthusage.item }}</td>
+            <td>{{ stats.bandwidthusage.count }}</td>
+        </tr>
+        </tbody>
+    </table>
+    {% endif %}
+
+    {% if currentUser.can('permCpanelAdvStats') or currentUser.admin %}
+    <br />
+
+
+    <br />
+    <h2>{{ "Server Information"|t }} (cPanel)</h2>
+    <table class="data" style="width:700px">
+        <tbody>
+
+        <tr>
+            <td style="width:320px;">{{ stats.phpversion.item }}</td>
+            <td>{{ stats.phpversion.value }}</td>
+        </tr>
+        <tr>
+            <td style="width:320px;">{{ stats.cpanelversion.item }}</td>
+            <td>{{ stats.cpanelversion.value }}</td>
+        </tr>
+        <tr>
+            <td style="width:320px;">{{ stats.mysqlversion.item }}</td>
+            <td>{{ stats.mysqlversion.value }}</td>
+        </tr>
+        <tr>
+            <td style="width:320px;">{{ stats.apacheversion.item }}</td>
+            <td>{{ stats.apacheversion.value }}</td>
+        </tr>
+        </tbody>
+    </table>
+    {% endif %}
+
+
+
+{% endset %}
+
+{% extends "cpanelemail/_layouttabs" %}
+
+{% set title = "Email Management"|t %}
+
+{% set selectedTab = 'dashboard' %}
