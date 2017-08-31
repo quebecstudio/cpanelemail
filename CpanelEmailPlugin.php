@@ -81,7 +81,7 @@ class CpanelEmailPlugin extends BasePlugin
 		      'cpanel_port' => array(AttributeType::Number, 'required' => true, 'default' => 2082),
           'cpanel_username' => array(AttributeType::String, 'required' => true, 'default' => 'root'),
           'cpanel_password' => array(AttributeType::String, 'required' => true, 'default' => '1234'),
-          'cpanel_account' => array(AttributeType::String, 'required' => true, 'default' => 'myaccount'),          
+          'cpanel_account' => array(AttributeType::String, 'required' => true, 'default' => 'myaccount'),
       );
     }
 
@@ -102,9 +102,7 @@ class CpanelEmailPlugin extends BasePlugin
             'permEmailAcc' => array('label' => Craft::t('Manage email accounts/users')),
             'permEmailFwd' => array('label' => Craft::t('Manage email redirections')),
             'permEmailDmnFwd' => array('label' => Craft::t('Manage domain redirections')),
-            'permEmailMsg' => array('label' => Craft::t('Manage auto responders for email accounts')),
-            'permEmailStats' => array('label' => Craft::t('View usage statistics')),
-            'permEmailAdvStats' => array('label' => Craft::t('View website and server statistics (advanced)')),
+            'permEmailMsg' => array('label' => Craft::t('Manage auto responders for email accounts')),                        
         );
     }
 
