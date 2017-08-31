@@ -11,6 +11,7 @@
     {% endfor %}
 
     <form action="" method="post" accept-charset="UTF-8">
+        {{ getCsrfInput() }}
         <input type="hidden" name="action" value="cpanelEmail/mailfwd/delete">
         <input type="hidden" name="redirect" value="cpanelemail/mailfwd">
         <input type="hidden" name="email" value="{{ sel.dest }}">

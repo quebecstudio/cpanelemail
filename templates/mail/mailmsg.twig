@@ -8,7 +8,9 @@
 
 {% set content %}
     {% set list = craft.cpanelemail.getEmailAutoResponders %}
-    {% if list %}
+    {% if list.ERROR %}
+      <strong>{{ "ERROR"|t }}:</strong> {{ list.ERROR }}
+    {% elseif list %}
                     <table class="data fullwidth">
                         <thead>
                             <tr>

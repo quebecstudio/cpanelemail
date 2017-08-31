@@ -20,7 +20,9 @@
 {% if currentUser.can('permEmailFwd') or currentUser.admin %}
 
     {% set list = craft.cpanelemail.getEmailFwd %}
-    {% if list %}
+    {% if list.ERROR %}
+      <strong>{{ "ERROR"|t }}:</strong> {{ list.ERROR }}
+    {% elseif list %}
 
 
                     <table class="data fullwidth">

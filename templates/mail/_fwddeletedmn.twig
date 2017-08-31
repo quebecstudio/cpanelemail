@@ -3,6 +3,7 @@
 
 
     <form action="" method="post" accept-charset="UTF-8">
+        {{ getCsrfInput() }}
         <input type="hidden" name="action" value="cpanelEmail/mailfwd/deletedmn">
         <input type="hidden" name="redirect" value="cpanelemail/mailfwd">
         <input type="hidden" name="domain" value="{{ domain }}">

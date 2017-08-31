@@ -41,7 +41,12 @@ class CpanelEmailVariable
   public function getEmailAcc()
   {
       $res =  $this->xmlapi->api2_query($this->account, "Email", "listpopswithdisk", array('api2_sort'=>true,'api2_sort_column'=>'email'));
-      if (isset($res['data'][1]))
+      //echo '<pre>';print_r($res);die();
+      if (isset($res['error']))
+      {
+        return array('ERROR' => $res['error']);
+      }
+      elseif (isset($res['data'][1]))
       {
           $out=$res['data'];
           return $out;
@@ -60,7 +65,11 @@ class CpanelEmailVariable
   public function getEmailFwd()
   {
       $res =  $this->xmlapi->api2_query($this->account, "Email", "listforwards", array('api2_sort'=>true,'api2_sort_column'=>'forward') );
-      if (isset($res['data'][1]))
+      if (isset($res['error']))
+      {
+        return array('ERROR' => $res['error']);
+      }
+      elseif (isset($res['data'][1]))
       {
           $out=$res['data'];
           return $out;
@@ -79,7 +88,11 @@ class CpanelEmailVariable
   public function getEmailDmnFwd()
   {
       $res =  $this->xmlapi->api2_query($this->account, "Email", "listdomainforwards", array('api2_sort'=>true,'api2_sort_column'=>'forward') );
-      if (isset($res['data'][1]))
+      if (isset($res['error']))
+      {
+        return array('ERROR' => $res['error']);
+      }
+      elseif (isset($res['data'][1]))
       {
           $out=$res['data'];
           return $out;
@@ -99,7 +112,11 @@ class CpanelEmailVariable
   public function getEmailAutoResponders()
   {
       $res =  $this->xmlapi->api2_query($this->account, "Email", "listautoresponders", array('api2_sort'=>true,'api2_sort_column'=>'email') );
-      if (isset($res['data'][1]))
+      if (isset($res['error']))
+      {
+        return array('ERROR' => $res['error']);
+      }
+      elseif (isset($res['data'][1]))
       {
           $out=$res['data'];
           return $out;
