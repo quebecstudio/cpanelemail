@@ -143,7 +143,7 @@ class CpanelEmailVariable
   {
 
       $options=array(
-          'display' => 'emailforwarders|bandwidthusage|diskusage|phpversion|cpanelversion|mysqlversion|mysqldiskusage|emailaccounts|autoresponders|apacheversion'
+          'display' => 'emailforwarders|emailaccounts|autoresponders'
               );
 
       $res =  $this->xmlapi->api2_query($this->account, "StatsBar", "stat", $options );

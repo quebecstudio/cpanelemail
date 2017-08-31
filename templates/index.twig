@@ -5,7 +5,7 @@
 {% set content %}
 
 {% if not stats %}
- {% redirect "/"~ craft.config.cpTrigger|default('admin') ~"/settings/plugins/email" %}
+ {% redirect "/"~ craft.config.cpTrigger|default('admin') ~"/settings/plugins/cpanelemail" %}
 {% endif %}
 
 
@@ -52,53 +52,6 @@
     {% else %}
     <p>{{ "It seems all permissions are off."|t }} <a href="/{{ craft.config.cpTrigger|default('admin') }}/settings/plugins/cpanelemail">{{ "Please review your settings"|t }}</a></p>
     {% endif %}
-
-    {% if currentUser.can('permCpanelStats') or currentUser.admin %}
-    <br />
-    <h2>{{ "Usage Statistics"|t }}</h2>
-    <table class="data" style="width:700px">
-        <tbody>
-        <tr>
-            <td style="width:320px;">{{ stats.diskusage.item }}</td>
-            <td>{{ stats.diskusage.count }}</td>
-        </tr>
-        <tr>
-            <td style="width:320px;">{{ stats.bandwidthusage.item }}</td>
-            <td>{{ stats.bandwidthusage.count }}</td>
-        </tr>
-        </tbody>
-    </table>
-    {% endif %}
-
-    {% if currentUser.can('permCpanelAdvStats') or currentUser.admin %}
-    <br />
-
-
-    <br />
-    <h2>{{ "Server Information"|t }} (cPanel)</h2>
-    <table class="data" style="width:700px">
-        <tbody>
-
-        <tr>
-            <td style="width:320px;">{{ stats.phpversion.item }}</td>
-            <td>{{ stats.phpversion.value }}</td>
-        </tr>
-        <tr>
-            <td style="width:320px;">{{ stats.cpanelversion.item }}</td>
-            <td>{{ stats.cpanelversion.value }}</td>
-        </tr>
-        <tr>
-            <td style="width:320px;">{{ stats.mysqlversion.item }}</td>
-            <td>{{ stats.mysqlversion.value }}</td>
-        </tr>
-        <tr>
-            <td style="width:320px;">{{ stats.apacheversion.item }}</td>
-            <td>{{ stats.apacheversion.value }}</td>
-        </tr>
-        </tbody>
-    </table>
-    {% endif %}
-
 
 
 {% endset %}

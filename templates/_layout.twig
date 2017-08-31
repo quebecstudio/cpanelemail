@@ -2,7 +2,7 @@
 {% set settings = craft.cpanelemail.getSettings() %}
 
 {% set subnav = {} %}
-{% set subnav = subnav|merge({overview: {label: "System Overview"|t, url: url('email') }}) %}
+{% set subnav = subnav|merge({overview: {label: "System Overview"|t, url: url('cpanelemail') }}) %}
 
 {% if currentUser.can('permEmailAcc') or currentUser.admin %}
 {% set subnav = subnav|merge({mailacc: {label: "Email Accounts"|t, url: url('cpanelemail/mailacc') }}) %}

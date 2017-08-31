@@ -44,14 +44,14 @@
                             <td style="text-align:right">
                                 <a data-icon="edit" alt="{{ "Quota"|t }}" title="{{ "Quota"|t }}" class="btn"  href="/{{ craft.config.cpTrigger|default('admin') }}/cpanelemail/mailacc/quota/{{ email.user ~"@"~email.domain }}"></a>
                                 <a data-icon="secure" alt="{{ "Password"|t }}" title="{{ "Password"|t }}" class="btn" href="/{{ craft.config.cpTrigger|default('admin') }}/cpanelemail/mailacc/password/{{ email.user ~"@"~email.domain }}"></a>
-                                <a data-icon="trash" alt="{{ "Delete"|t }}" title="{{ "Delete"|t }}" class="btn" href="/{{ craft.config.cpTrigger|default('admin') }}/cpanelemail/mailacc/delete/{{ email.user ~"@"~email.domain }}"></a>                                
+                                <a data-icon="trash" alt="{{ "Delete"|t }}" title="{{ "Delete"|t }}" class="btn" href="/{{ craft.config.cpTrigger|default('admin') }}/cpanelemail/mailacc/delete/{{ email.user ~"@"~email.domain }}"></a>
                             </td>
                         </tr>
                         {% endfor %}
                         </tbody>
                     </table>
     {% else %}
-    <p class="disabled"><em>{{ "There is no email account yet" }}</em></p>
+    <p class="disabled"><em>{{ "There is no email account yet"|t }}</em></p>
     {% endif %}
 
 
